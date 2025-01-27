@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use App\Enum\TaskPriority;
 use App\Enum\TaskStatus;
 use App\Repository\TaskRepository;
@@ -12,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource]
+#[GetCollection(paginationMaximumItemsPerPage: 10)]
+#[ApiFilter(OrderFilter::class, properties: ["dueDate" => "ASC", "priority" => "DESC"])]
 class Task
 {
     #[ORM\Id]
