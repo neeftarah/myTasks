@@ -6,32 +6,52 @@
          backupGlobals="false"
          colors="true"
          bootstrap="tests/bootstrap.php"
-         convertDeprecationsToExceptions="false"
+         testdox="true"
+         defaultTestSuite="Unit test"
 >
     <php>
         <ini name="display_errors" value="1" />
         <ini name="error_reporting" value="-1" />
         <server name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
-        <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
-        <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+        <testsuite name="Unit test">
+            <directory>tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="Smoke tests">
+            <directory>tests/Smoke</directory>
+        </testsuite>
+
+        <testsuite name="Integration tests">
+            <directory>tests/Integration</directory>
+        </testsuite>
+
+        <testsuite name="Functional tests">
+            <directory>tests/Functional</directory>
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">src</directory>
         </include>
-    </coverage>
+        <exclude>
+            <directory suffix=".php">src/Enum</directory>
+            <file>src/Kernel.php</file>
+        </exclude>
+    </source>
 
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
+    <coverage includeUncoveredFiles="true"
+              pathCoverage="false"
+              ignoreDeprecatedCodeUnits="true"
+              disableCodeCoverageIgnore="true">
+        <report>
+            <html outputDirectory="./var/test/html-coverage" lowUpperBound="50" highLowerBound="90"/>
+        </report>
+    </coverage>
 
     <extensions>
     </extensions>

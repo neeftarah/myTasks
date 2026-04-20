@@ -1,9 +1,16 @@
 api_platform:
-    title: Hello API Platform
+    title: MyTasks API
     version: 1.0.0
+    # Enable the Swagger documentation and export.
+    enable_swagger: true
+    enable_swagger_ui: true
     defaults:
         pagination_client_enabled: true
         pagination_items_per_page: 10 # Default value
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
+    formats:
+        jsonld: ['application/ld+json']
+        json: ['application/json']
+        html: ['text/html']

@@ -31,6 +31,11 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Patch(),
         new Delete(),
     ],
+    formats: [
+        'json',
+        'jsonld',
+        'html',
+    ],
 )]
 #[GetCollection(paginationMaximumItemsPerPage: 10)]
 #[ApiFilter(OrderFilter::class, properties: ["dueDate" => "ASC", "priority" => "DESC"])]
@@ -71,15 +76,19 @@ class Task
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
+    public function setCreatedAtValue(): Task
     {
         $this->createdAt = new \DateTimeImmutable();
+
+        return $this;
     }
 
     #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): void
+    public function setUpdatedAtValue(): Task
     {
         $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
     }
 
     public function getId(): ?int
@@ -167,6 +176,27 @@ class Task
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Vérifie si la tâche est terminée.
+     * @return bool Vrai si la tâche est terminée, faux sinon.
+     */
+    public function isDone(): bool
+    {
+        return TaskStatus::DONE === $this->status;
+    }
+
+    /**
+     * Marque la tâche comme terminée.
+     * @param bool $finished Vrai si la tâche est terminée, faux sinon.
+     * @return Task
+     */
+    public function setDone(bool $finished): Task
+    {
+        $this->status = $finished ? TaskStatus::DONE : TaskStatus::TODO;
 
         return $this;
     }
